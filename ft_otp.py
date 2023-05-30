@@ -1,11 +1,19 @@
 import argparse
 import os
+import string
 
 
 def get_hex_value(hex_file):
     # open file, read it, check if is hex64 true = return hex false = parse error
-    raise NotImplementedError('get_hex_value not implemented yet')
-
+    with open(hex_file, 'r') as f:
+        text = f.read()
+    print(len(text))
+    if len(text) < 64:
+        return False
+    if not all(c in string.hexdigits for c in text):
+        return False
+    return text
+    
 
 def get_key_value(key_file):
     # decypher file, open file, read it, check if is hex64 true = return hex false = parse error
@@ -32,6 +40,8 @@ def parse_args():
         if not os.path.isfile(parsed_args.g):
             parser.error('hex file not found!')
         parsed_args.g = get_hex_value(parsed_args.g)
+        if not parsed_args.g:
+            parser.error('key must be 64 hexadecimal characters.')
 
     return parsed_args
 
